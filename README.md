@@ -4,7 +4,7 @@ ToDoApp is an android app that allows building a todo list and basic todo items 
 
 Submitted by: Murtaza Gaadiwala
 
-Time spent: 4 hours spent in total
+Time spent: 5 hours spent in total
 
 ## User Stories
 
@@ -19,25 +19,28 @@ The following **optional** features are implemented:
 * [ ] Persist the todo items [into SQLite](http://guides.codepath.com/android/Persisting-Data-to-the-Device#sqlite) instead of a text file
 * [ ] Improve style of the todo items in the list [using a custom adapter](http://guides.codepath.com/android/Using-an-ArrayAdapter-with-ListView)
 * [ ] Add support for completion due dates for todo items (and display within listview item)
-* [ ] Use a [DialogFragment](http://guides.codepath.com/android/Using-DialogFragment) instead of new Activity for editing items
+* [x] Use a [DialogFragment](http://guides.codepath.com/android/Using-DialogFragment) instead of new Activity for editing items
 * [ ] Add support for selecting the priority of each todo item (and display in listview item)
 * [ ] Tweak the style improving the UI / UX, play with colors, images or backgrounds
 
 The following **additional** features are implemented:
 
 * [ ] List anything else that you can get done to improve the app functionality!
+* [x] Converted **Add Item** from a simple EditText to present as DialogFragment
 
 ## Video Walkthrough 
 
 Here's a walkthrough of implemented user stories:
 
-<img src='https://github.com/migaadi/ToDoApp/blob/master/ToDoApp_walkthru.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
+<img src='https://github.com/migaadi/ToDoApp/blob/master/ToDoApp_DialogFragment_walkthru.gif' title='Video Walkthrough - DialogFragment' width='' alt='Video Walkthrough - DialogFragment' />
+
+<img src='https://github.com/migaadi/ToDoApp/blob/master/ToDoApp_walkthru.gif' title='Video Walkthrough - Basic' width='' alt='Video Walkthrough - Basic' />
 
 GIF created with [LiceCap](http://www.cockos.com/licecap/).
 
 ## Notes
 
-It took some time to understand the role of content_edit_item.xml which was added automatically when creating a blank activity in the latest version of Android Studio. Also, the newer version of Android Studio is giving lot of trouble in rendering the layout Preview (showing lots of Rendering Problems errors). Later I found online that "invalidating cahces/restarting" option in Android Studio sometimes fixes this issue. 
+The edit item implementation using DialogFragment has one issue. Currently, I am not able to use the 'position' info and hence an edited item is always moved to the end after the dialog is dismissed. 
 
 ## License
 
