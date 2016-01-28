@@ -2,11 +2,11 @@ package com.gaadiwala.todoapp;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.EditText;
 import android.widget.ListView;
 
 import org.apache.commons.io.FileUtils;
@@ -15,14 +15,13 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements AddItemDialog.AddItemDialogListener {
 
     private final int REQUEST_CODE = 21;
 
     ArrayList<String> todoItems;
     ArrayAdapter<String> aTodoAdapter;
     ListView lvItems;
-    private EditText etEditText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,7 +30,6 @@ public class MainActivity extends AppCompatActivity {
         populateArrayItems();
         lvItems = (ListView) findViewById(R.id.lvItems);
         lvItems.setAdapter(aTodoAdapter);
-        etEditText = (EditText) findViewById(R.id.etEditText);
 
         // Long Click Listener for an item deletion
         lvItems.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
@@ -79,9 +77,23 @@ public class MainActivity extends AppCompatActivity {
 
     // button click handler for adding an item
     public void onAddItem(View view) {
-        aTodoAdapter.add(etEditText.getText().toString());
-        etEditText.setText("");
-        writeItems();
+        showAddItemDialog();
+    }
+
+    // invokes a dialog for user text input
+    private void showAddItemDialog() {
+        FragmentManager fm = getSupportFragmentManager();
+        AddItemDialog addItemDialog = AddItemDialog.newInstance("Add an item");
+        addItemDialog.show(fm, "fragment_add_item_dialog");
+    }
+
+    @Override
+    // Process the text returned by 'add item dialog'
+    public void onFinishAddItemDialog(String inputText) {
+        if (inputText != null) {
+            aTodoAdapter.add(inputText);
+            writeItems();
+        }
     }
 
     // read items from the persistent storage (a file)
