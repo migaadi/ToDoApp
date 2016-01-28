@@ -1,6 +1,5 @@
 package com.gaadiwala.todoapp;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
@@ -15,9 +14,10 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity implements AddItemDialog.AddItemDialogListener {
+public class MainActivity extends AppCompatActivity implements AddItemDialog.AddItemDialogListener,
+        EditItemDialog.EditItemDialogListener {
 
-    private final int REQUEST_CODE = 21;
+//    private final int REQUEST_CODE = 21;
 
     ArrayList<String> todoItems;
     ArrayAdapter<String> aTodoAdapter;
@@ -46,15 +46,22 @@ public class MainActivity extends AppCompatActivity implements AddItemDialog.Add
         lvItems.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                // Edit item using DialogFragment
+                showEditItemDialog(position);
+                // Edit item using an activity - Not removing purposefully!
+/*
                 Intent i = new Intent(MainActivity.this, EditItemActivity.class);
                 // put "extras" in the bundle for access in second activity
                 i.putExtra("position", position);
                 i.putExtra("text", todoItems.get(position));
                 startActivityForResult(i, REQUEST_CODE);
+*/
             }
         });
     }
 
+    // Edit item using an activity - Not removing purposefully!
+/*
     @Override
     // Process result received from 'edit item' activity
     protected void onActivityResult (int requestCode, int resultCode, Intent data) {
@@ -68,6 +75,7 @@ public class MainActivity extends AppCompatActivity implements AddItemDialog.Add
             writeItems();
         }
     }
+*/
 
     // read items from the file and fill the adapter
     public void populateArrayItems() {
@@ -87,11 +95,30 @@ public class MainActivity extends AppCompatActivity implements AddItemDialog.Add
         addItemDialog.show(fm, "fragment_add_item_dialog");
     }
 
+    // invokes a dialog for editing an existing item
+    private void showEditItemDialog(int position) {
+        FragmentManager fm = getSupportFragmentManager();
+        EditItemDialog editItemDialog = EditItemDialog.newInstance(todoItems.get(position));
+        editItemDialog.show(fm, "fragment_edit_item_dialog");
+        todoItems.remove(position);
+    }
+
     @Override
     // Process the text returned by 'add item dialog'
     public void onFinishAddItemDialog(String inputText) {
         if (inputText != null) {
             aTodoAdapter.add(inputText);
+            writeItems();
+        }
+    }
+
+    @Override
+    // Process the text returned by 'edit item dialog'
+    public void onFinishEditItemDialog(String editedText) {
+        if (editedText != null) {
+            // This is not a clean solution as edited items are
+            // getting added to the end instead of in-place editing
+            aTodoAdapter.add(editedText);
             writeItems();
         }
     }
